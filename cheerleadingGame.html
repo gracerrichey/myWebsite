@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheerleading Trivia Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #d84315;
+        }
+
+        .question {
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+
+        .choices {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .choices li {
+            margin: 10px 0;
+        }
+
+        button {
+            background-color: #d84315;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #bf360c;
+        }
+
+        .result {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        .play-again {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cheerleading Trivia Game</h1>
+    <p>Test your knowledge of cheerleading!</p>
+
+    <div id="game">
+        <div id="question-container" class="question"></div>
+        <ul id="choices" class="choices"></ul>
+        <div id="result" class="result"></div>
+        <button id="next-question" style="display: none;">Next Question</button>
+        <button id="play-again" class="play-again" style="display: none;">Play Again</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Which move involves throwing a flyer high into the air?",
+                choices: ["Stunt", "Toss", "Pyramid", "Jump"],
+                answer: "Toss"
+            },
+            {
+                question: "What is the role of a base in cheerleading?",
+                choices: ["To perform flips", "To support the flyer", "To lead chants", "To dance"],
+                answer: "To support the flyer"
+            },
+            {
+                question: "Which organization hosts the Cheerleading World Championships?",
+                choices: ["USA Cheer", "Varsity Spirit", "ICU", "UCA"],
+                answer: "ICU"
+            },
+            {
+                question: "What is the typical number of counts in a cheer routine?",
+                choices: ["6", "8", "16", "4"],
+                answer: "8"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionContainer = document.getElementById("question-container");
+        const choicesContainer = document.getElementById("choices");
+        const resultContainer = document.getElementById("result");
+        const nextQuestionButton = document.getElementById("next-question");
+        const playAgainButton = document.getElementById("play-again");
+
+        function showQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            questionContainer.textContent = currentQuestion.question;
+            choicesContainer.innerHTML = "";
+            currentQuestion.choices.forEach(choice => {
+                const li = document.createElement("li");
+                const button = document.createElement("button");
+                button.textContent = choice;
+                button.onclick = () => checkAnswer(choice);
+                li.appendChild(button);
+                choicesContainer.appendChild(li);
+            });
+            resultContainer.textContent = "";
+            nextQuestionButton.style.display = "none";
+        }
+
+        function checkAnswer(selectedChoice) {
+            const currentQuestion = questions[currentQuestionIndex];
+            if (selectedChoice === currentQuestion.answer) {
+                resultContainer.textContent = "Correct!";
+                resultContainer.style.color = "green";
+                score++;
+            } else {
+                resultContainer.textContent = `Wrong! The correct answer was: ${currentQuestion.answer}`;
+                resultContainer.style.color = "red";
+            }
+            nextQuestionButton.style.display = "block";
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                showFinalScore();
+            }
+        }
+
+        function showFinalScore() {
+            questionContainer.textContent = `You scored ${score} out of ${questions.length}!`;
+            choicesContainer.innerHTML = "";
+            nextQuestionButton.style.display = "none";
+            playAgainButton.style.display = "block";
+        }
+
+        function resetGame() {
+            currentQuestionIndex = 0;
+            score = 0;
+            playAgainButton.style.display = "none";
+            showQuestion();
+        }
+
+        nextQuestionButton.onclick = nextQuestion;
+        playAgainButton.onclick = resetGame;
+
+        showQuestion();
+    </script>
+</body>
+</html>
